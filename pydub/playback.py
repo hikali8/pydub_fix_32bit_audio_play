@@ -20,7 +20,14 @@ def _play_with_pyaudio(seg):
     import pyaudio
 
     p = pyaudio.PyAudio()
-    stream = p.open(format=p.get_format_from_width(seg.sample_width),
+    
+    format = None
+    if seg.sample_width == 4:
+        format = pyaudio._portaudio.paInt32
+    else:
+        format = p.get_format_from_width(seg.sample_width)
+    
+    stream = p.open(format=format,
                     channels=seg.channels,
                     rate=seg.frame_rate,
                     output=True)
